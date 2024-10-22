@@ -1,3 +1,7 @@
+import json
+import tkinter
+import customtkinter
+import keyboard
 from lib.controls_module import * # modules in /lib
 from paths.vending_machine import *
 
@@ -14,7 +18,7 @@ tabView.add("Credits")
 tabView.add("Webhook")
 
 default_settings = {
-    "version": "v1.3",
+    "version": "v1.4",
     "is_running": 0,
     "autoclicker_running": 0,
 
@@ -24,6 +28,7 @@ default_settings = {
     "vending_enabled" : 0,
     "screenshot_enabled" : 0,
     "webhook_enabled" : 0,
+    "allpaths" : 0,
 
     "upgrade_delay": 5,
     "upgrade_startpos": 1,
@@ -32,6 +37,7 @@ default_settings = {
     "vending_delay": 10,
     "vending_cooldown": 0
     }
+
 
 # -------- CONFIGS -------- #
 
@@ -52,7 +58,7 @@ def update_config():
     with open(config_path, 'w') as f:
         json.dump(config, f)
 
-app.title(f"SaiGO {config["version"]}")
+app.title(f'SaiGO {config["version"]}')
 
 # -------- MAIN LOOPS -------- #
 
@@ -331,7 +337,23 @@ def reset_zoom():
     move_to(50, 70)
     mouse_release("R")
 
-def test_module():
+def toggle_all_paths(): 
+ config['version']
+config['is_running']
+config['autoclicker_running']
+config['darkmode_enabled']
+config['autoclicker_enabled']
+config['upgrade_enabled']
+config['vending_enabled']
+config['screenshot_enabled']
+config['webhook_enabled']
+config['upgrade_delay']
+config['upgrade_startpos']
+config['upgrade_cooldown']
+config['vending_delay']
+config['vending_cooldown']
+
+def test_module(): 
     unupgraded_tiles = find_upgradeable_tile()
     for i in unupgraded_tiles:
         move_to(i[0], i[1])
@@ -367,16 +389,18 @@ main_frame.pack(padx=10, pady=10, fill="both", expand=True)
 main_label = customtkinter.CTkLabel(main_frame, text= "Main Settings", font=("Arial", 16))
 main_label.pack(pady=(10,5))
 
-upgrade_delay_label = customtkinter.CTkLabel(main_frame, text=f"Upgrade Delay: {int(config["upgrade_delay"])} min", font=("Arial", 12))
+upgrade_delay_label = customtkinter.CTkLabel(main_frame, text=f'Upgrade Delay: {int(config["upgrade_delay"])} min', font=("Arial", 12))
 upgrade_delay_label.pack(pady=(10, 5))
 upgrade_delay_slider = customtkinter.CTkSlider(main_frame, from_=1, to=30, number_of_steps=29, command=update_upgrade_delay_label)
 upgrade_delay_slider.pack(pady=(10, 5))
 upgrade_delay_slider.set(config["upgrade_delay"])
 
-screenshoot_function_var = tkinter.IntVar()
-screenshoot_function_var.set(config["screenshot_enabled"])
-screenshot_function_checkbox = customtkinter.CTkCheckBox(main_frame, text="Dark Mode", variable=screenshoot_function_var, command=toggle_screenshot_function)
-screenshot_function_checkbox.pack(pady=(5, 10))
+
+enable_all_paths_var = tkinter.IntVar()
+enable_all_paths_var.set(config["allpaths"])
+enable_all_paths_checkbox= customtkinter.CTkCheckBox(main_frame, text=" Enable All Paths", variable=enable_all_paths_var, command=toggle_all_paths)
+enable_all_paths_checkbox.pack(pady=(5, 10))
+
 
 button_1 = customtkinter.CTkButton(main_frame, text="F1 START", command=begin_macro)
 button_1.pack(padx=20, pady=20)
@@ -444,6 +468,11 @@ webhook_var.set(config["webhook_enabled"])
 webhook_url_input_checkbox = customtkinter.CTkCheckBox(webhook_frame, text="Enable Webhook", variable=webhook_var, command=toggle_webhook)
 webhook_url_input_checkbox.pack(side="left", padx=(10, 10))
 
+webhook_label = customtkinter.CTkLabel( webhook_frame, text="Webhook URL:")
+webhook_label.pack(pady=10)
+
+webhook_entry = customtkinter.CTkEntry(app, width=250)
+webhook_entry.pack(pady=5)
 
 # Load the image
 try:
